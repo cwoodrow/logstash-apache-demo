@@ -1,27 +1,31 @@
-#Logstash Demo
---------------
+# Logstash Demo
 
-This is a Demo for quick logstash configuration
+Ceci est une démo permettant de tester une configuration rapide de Logstash sur des logs Apache.
 
-### Prerequisites
-* Having an Apache server installed
-* Having an ELK stack installed, if not : http://www.elasticsearch.org/overview/elkdownloads/
-* Having a Gatling 2 installed, if not http://gatling.io/download/
+## Prérequis
+* Un server Apache (ou LAMP ou XAMPP)
+* La stack ELK, si elle n'est pas installée, vous trouverez les instrcutions ici : <https://github.com/cwoodrow/elasticsearch-workshop>
+* Télécharger la dernière version de gatling <https://gatling.io/download/>
 
-##Set Up
+## Logs Apache
+Dans un premier temps, nous allons parser les logs d'un serveur Apache.
 
 ### Web app
-Ship the content of **static-webapp** in your apache server (DocumentRoot "<path to logstash-demo/apache>/")
 
-### Logstash
-Modify the **apache-logs.conf**, set the correct value for apache logs (typically */var/log/apache2/access.log*)
+Ajouter l'application **ma-zone** à votre serveur web, cette opération peut être effectuée en créant un lien symbolique :
+
+    cd <le répertoire htdocs de votre installation de Apache>
+    ln -s <répertoire du projet>/apache ma-zone
+
+Vérifiez que vous disposez bien de l'accès à l'URL (exactement!) <http://localhost/ma-zone/>
 
 ### Gatling
-Copy **user-files** in your local Gatling installation
 
-##Run
-Logstash : 
-	logstash agent -f apache-logs.conf
+Nous allons à présent lancer Gatling afin de créer des logs dans Apache :
 
-Gatling :
-	./bin/gatling
+    cd <répertoire du projet>/user-files
+    ${GATLING_HOME}/bin/gatling.sh -df data/ -sf simulations/ -s mazone
+
+### Logstash
+
+Vous pouvez à présent parser les logs à l'aide de **Logstash**.
